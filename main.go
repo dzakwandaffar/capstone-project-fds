@@ -14,7 +14,11 @@ func main() {
 	authRoute.POST("/login", handler.NewAuth().Login)
 
 	accountRoute := r.Group("/account")
-	accountRoute.POST("/balance", handler.NewAccount().CreateAccount)
+	accountRoute.GET("/get", handler.NewAccount().GetAccount)
+	accountRoute.POST("/create", handler.NewAccount().CreateAccount)
+	accountRoute.PATCH("/update/:id", handler.NewAccount().UpdateAccount)
+	accountRoute.DELETE("/remove/:id", handler.NewAccount().DeleteAccount)
+	accountRoute.POST("/balance", handler.NewAccount().BalanceAccount)
 
 	transactionRoute := r.Group("/transaction")
 	transactionRoute.POST("/transfer-bank", handler.NewTransaction().TransferBank)
