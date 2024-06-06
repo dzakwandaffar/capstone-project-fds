@@ -46,13 +46,13 @@ func main() {
 
 	transactionRoute := r.Group("/transaction")
 	transactionRoute.POST("/transfer-bank", handler.NewTransaction().TransferBank)
-	transactionRoute.GET("/get", func (g *gin.Context){
+	transactionRoute.GET("/get", func(g *gin.Context) {
 		clientResponse, err := proto.NewServiceTransactionService("service-transaction", srvTransaction.Client()).
-		Call(context.Background(), &proto.CallRequest{
-			Name: "Daffa",
-		}, addressServiceTransactionOpt)
+			Login(context.Background(), &proto.LoginRequest{
+				Username: "Daffa",
+			}, addressServiceTransactionOpt)
 
-		if err != nil{
+		if err != nil {
 			g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
@@ -61,7 +61,7 @@ func main() {
 			"data": clientResponse,
 		})
 	})
-	
+
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
