@@ -34,12 +34,12 @@ func (a *accountImplement) GetAccount(g *gin.Context) {
 
 	defer db.Close()
 
-	q := orm
-	if name != "" {
-		q = q.Where("name=?", name)
-	}
+	// q := orm
+	// if name != "" {
+	// 	q = q.Where("name=?", name)
+	// }
 
-	result := q.Find(&accounts)
+	result := orm.Find(&accounts, "name = ?", name)
 
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -168,9 +168,9 @@ func (a *accountImplement) BalanceAccount(g *gin.Context) {
 
 	defer db.Close()
 
-	orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("").First(&sumResult)
 	q := orm
 	result := q.Find(&transaction)
+	orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("").First(&sumResult)
 
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
