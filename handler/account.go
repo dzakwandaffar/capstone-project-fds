@@ -148,15 +148,18 @@ func (a *accountImplement) DeleteAccount(g *gin.Context) {
 	})
 }
 
-type BodyPayloadBalance struct{}
+type BodyPayloadBalance struct{
+	Account_ID string
+	Month string
+}
 
 func (a *accountImplement) BalanceAccount(g *gin.Context) {
-	// bodyPayloadBal := BodyPayloadBalance{}
+	bodyPayloadBal := BodyPayloadBalance{}
 	
-	// err := g.BindJSON(&bodyPayloadBal)
-	// if err != nil {
-	// 	g.AbortWithError(http.StatusBadRequest, err)
-	// }
+	err := g.BindJSON(&bodyPayloadBal)
+	if err != nil {
+		g.AbortWithError(http.StatusBadRequest, err)
+	}
 
 	sumResult := struct {
 		Total int
@@ -170,7 +173,7 @@ func (a *accountImplement) BalanceAccount(g *gin.Context) {
 
 	q := orm
 	result := q.Find(&transaction)
-	orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("").First(&sumResult)
+	orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("account_id = ? AND date_part( 'Month' , transaction_date) = ?", bodyPayloadBal.Account_ID, bodyPayloadBal.Month).Group("account_id").Scan(&sumResult)
 
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
