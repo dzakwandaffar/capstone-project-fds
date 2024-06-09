@@ -32,7 +32,7 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 	db, _ := orm.DB()
 
 	defer db.Close()
-
+	
 	result := orm.Create(&bodyPayloadTxn)
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

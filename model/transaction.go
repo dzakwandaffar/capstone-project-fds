@@ -3,10 +3,10 @@ package model
 import "time"
 
 type Transaction struct {
-	ID              int    `gorm:"primarykey"`
-	AccountID       string `gorm:"foreignkey"`
-	BankID          string `gorm:"foreignkey"`
-	Amount          int    `gorm:"column:amount"`
+	ID              int    `gorm:"primarykey;autoincrement" json:id` 
+	AccountID       string `gorm:"foreignkey" json:"account_id"`
+	BankID          string `gorm:"foreignkey" json:"bank_id"`
+	Amount          float64   `gorm:"column:amount" json:amount`
 	TransactionDate *time.Time
 }
 
