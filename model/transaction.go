@@ -7,7 +7,7 @@ type Transaction struct {
 	AccountID       string `gorm:"foreignkey" json:"account_id"`
 	BankID          string `gorm:"foreignkey" json:"bank_id"`
 	Amount          float64   `gorm:"column:amount" json:amount`
-	TransactionDate *time.Time
+	TransactionDate *time.Time `gorm:"column:transaction_date" json:"transaction_date"`
 }
 
 func (a *Transaction) TableName() string {
