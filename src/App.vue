@@ -39,7 +39,7 @@ const tambahCounter = () => {
         <RouterLink v-if="auth.isLoggedIn" to="/">Home</RouterLink>
         <RouterLink v-if="auth.isLoggedIn" to="/about">About</RouterLink>
         <RouterLink v-if="!auth.isLoggedIn" to="/login">Login</RouterLink>
-        <RouterLink v-if="auth.isLoggedIn" to="/transfer">Transfer</RouterLink>
+        <RouterLink v-if="auth.isLoggedIn" to="/transaction">Transfer</RouterLink>
       </nav>
     </div>
   </header>
@@ -61,7 +61,7 @@ header {
 .logo {
   display: block;
   margin: 0 auto 2rem;
-  border: 5px solid white;
+  border: 5px solid ;
   border-radius: 50px;
 }
 

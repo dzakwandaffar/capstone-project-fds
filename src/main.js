@@ -17,10 +17,10 @@ import router from './router'
 const app = createApp(App)
 
 const vuetify = createVuetify({
-    components,
-    directives,
-    ssr: true,
-  })
+  components,
+  directives,
+  ssr: true
+})
 
 //axios
 app.use(VueAxios, myAxios)

@@ -1,53 +1,66 @@
-<template>
-  <div class="transfer-form">
-    <h2>Transfer</h2>
-    <form @submit.prevent="submitTransfer">
-      <div class="form-group">
-        <label for="sender">Pengirim</label>
-        <input type="text" id="sender" v-model="transfer.sender" required />
-      </div>
-      <div class="form-group">
-        <label for="receiver">Penerima</label>
-        <input type="text" id="receiver" v-model="transfer.receiver" required />
-      </div>
-      <div class="form-group">
-        <label for="amount">Jumlah</label>
-        <input type="number" id="amount" v-model="transfer.amount" required />
-      </div>
-      <button type="submit">Kirim</button>
-    </form>
-  </div>
-</template>
+<script setup>
+import { reactive, inject } from 'vue'
+import { VNumberInput } from 'vuetify/labs/VNumberInput'
+const data = reactive({
+  AccountID: '',
+  BankID: '',
+  Amount: 0,
+  TransactionDate: '',
+  snackbar: false,
+  pesanTransfer: ''
+})
 
-<script>
-import axios from 'axios';
+const myAxios = inject('myAxios')
 
-export default {
-  data() {
-    return {
-      transfer: {
-        sender: '',
-        receiver: '',
-        amount: ''
+const submit = () => {
+  console.log('submit clicked', data)
+
+  myAxios
+    .post('/transaction/transfer-bank', {
+      AccountID: data.AccountID,
+      BankID: data.BankID,
+      Amount: data.Amount
+    })
+    .then(
+      (res) => {
+        if (res.status == 200) {
+          data.pesanTransfer = 'Transaksi Berhasil'
+        }
+        data.snackbar = true
+      },
+      (err) => {
+        data.pesanTransfer = 'Transaksi Gagal'
+        data.snackbar = true
       }
-    };
-  },
-  methods: {
-    async submitTransfer() {
-      try {
-        const response = await axios.post('http://localhost:3000/api/transfers', this.transfer);
-        alert('Transfer berhasil: ' + response.data.message);
-        this.transfer.sender = '';
-        this.transfer.receiver = '';
-        this.transfer.amount = '';
-      } catch (error) {
-        console.error('Terjadi kesalahan:', error);
-        alert('Transfer gagal');
-      }
-    }
-  }
-};
+    )
+}
 </script>
+
+<template>
+  <v-card variant="tonal" class="pa-3">
+    <div class="container">
+      <div>
+        <label>Account ID</label>
+        <v-text-field type="text" v-model="data.AccountID" />
+      </div>
+      <div>
+        <label>Bank ID</label>
+        <v-text-field type="text" v-model="data.BankID" />
+      </div>
+      <div>
+        <label>Amount</label>
+        <v-number-input v-model="data.Amount" />
+      </div>
+      <v-btn @click="submit"> Button </v-btn>
+    </div>
+    <v-snackbar v-model="data.snackbar">
+      {{ data.pesanTransfer }}
+      <template v-slot:actions>
+        <v-btn color="plum" variant="text" @click="data.snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
+  </v-card>
+</template>
 
 <style scoped>
 .transfer-form {
@@ -75,8 +88,8 @@ input {
 
 button {
   padding: 10px 15px;
-  background-color: #28a745;
-  color: white;
+  background-color: plum;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
