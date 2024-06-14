@@ -39,6 +39,8 @@ func main() {
 	// transactionRoute := r.Group("/")
 	// transactionRoute.POST("/transfer-bank", handler.NewTransaction().TransferBank)
 	transactionRoute.GET("/biller", handler.NewTransaction().GetTransaction)
+	transactionRoute.GET("/biller/list-account", handler.NewTransaction().GetListAccount)
+	transactionRoute.GET("/biller/:billerid/:accountid", handler.NewTransaction().GetCheckBiller)
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 

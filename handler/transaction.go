@@ -13,6 +13,8 @@ import (
 type TransactionInterface interface {
 	TransferBank(*gin.Context)
 	GetTransaction(*gin.Context)
+	GetListAccount(*gin.Context)
+	GetCheckBiller(*gin.Context)
 }
 
 type transactionImplement struct{}
@@ -65,6 +67,102 @@ func (b *transactionImplement) GetTransaction(g *gin.Context) {
 	var data = Biller{}
 
 	request, err := http.NewRequest("GET", "http://localhost:5000/v1/api/biller", nil)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	defer response.Body.Close()
+
+	fmt.Println(response.Body)
+
+	err = json.NewDecoder(response.Body).Decode(&data)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	g.JSON(http.StatusOK, data)
+
+}
+
+type BillerListAccount struct {
+	Data []struct {
+		BillerID  string `json:"BillerID"`
+		Amount    string `json:Amount`
+		Name      string `json:"Name"`
+		AccountID string `json: "AccountID"`
+	} `json:"data"`
+}
+
+func (b *transactionImplement) GetListAccount(g *gin.Context) {
+
+	var err error
+	var client = &http.Client{}
+	var data = BillerListAccount{}
+
+	request, err := http.NewRequest("GET", "http://localhost:5000/v1/api/biller/list-account", nil)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	response, err := client.Do(request)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	defer response.Body.Close()
+
+	fmt.Println(response.Body)
+
+	err = json.NewDecoder(response.Body).Decode(&data)
+	if err != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	g.JSON(http.StatusOK, data)
+
+}
+
+type CheckBiller struct {
+	Biller struct {
+		BillerID  string  `json:"BillerID"`
+		Amount    float64 `json:"Amount"`
+		Name      string  `json:"Name"`
+		AccountID string  `json:"AccountID"`
+		Paid      bool
+	} `json:"biller"`
+}
+
+func (b *transactionImplement) GetCheckBiller(g *gin.Context) {
+
+	var err error
+	var client = &http.Client{}
+	var data = CheckBiller{}
+
+	billerid := g.Param("billerid")
+	accountid := g.Param("accountid")
+
+	request, err := http.NewRequest("GET", "http://localhost:5000/v1/api/biller/"+billerid+"/"+accountid, nil)
 	if err != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
