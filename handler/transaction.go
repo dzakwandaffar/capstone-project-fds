@@ -100,7 +100,7 @@ func (b *transactionImplement) GetTransaction(g *gin.Context) {
 type BillerListAccount struct {
 	Data []struct {
 		BillerID  string `json:"BillerID"`
-		Amount    string `json:Amount`
+		Amount    string `json: Amount`
 		Name      string `json:"Name"`
 		AccountID string `json: "AccountID"`
 	} `json:"data"`
@@ -190,5 +190,42 @@ func (b *transactionImplement) GetCheckBiller(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, data)
+}
 
+type CheckMutasi struct {
+	Mutasi struct {
+		BillerID  string  `json:"BillerID"`
+		Amount    float64 `json:"Amount"`
+		Name      string  `json:"Name"`
+		AccountID string  `json:"AccountID"`
+		Paid      bool
+	} `json:"Mutasi"`
+}
+
+func (b *transactionImplement) GetCheckMutasi(g *gin.Context) {
+
+	queryParam := g.Request.URL.Query()
+
+	name := queryParam.Get("name")
+
+	accounts := []model.Account{}
+
+	orm := utils.NewDatabase().Orm
+	db, _ := orm.DB()
+
+	defer db.Close()
+
+	result := orm.Find(&accounts, "name = ?", name)
+
+	if result.Error != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": result.Error,
+		})
+		return
+	}
+
+	g.JSON(http.StatusOK, gin.H{
+		"message": "Get account successfully",
+		"data":    accounts,
+	})
 }

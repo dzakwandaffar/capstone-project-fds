@@ -34,11 +34,6 @@ func (a *accountImplement) GetAccount(g *gin.Context) {
 
 	defer db.Close()
 
-	// q := orm
-	// if name != "" {
-	// 	q = q.Where("name=?", name)
-	// }
-
 	result := orm.Find(&accounts, "name = ?", name)
 
 	if result.Error != nil {
@@ -55,9 +50,6 @@ func (a *accountImplement) GetAccount(g *gin.Context) {
 }
 
 type BodyPayloadAccount struct {
-	// AccountID string
-	// Name      string
-	// Address   string
 }
 
 func (a *accountImplement) CreateAccount(g *gin.Context) {
