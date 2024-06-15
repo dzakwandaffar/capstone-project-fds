@@ -1,13 +1,12 @@
 <script setup>
-import { reactive, inject } from 'vue'
+import { reactive, inject, onMounted } from 'vue'
 import { VNumberInput } from 'vuetify/labs/VNumberInput'
 const data = reactive({
-  AccountID: '',
-  BankID: '',
-  Amount: 0,
-  TransactionDate: '',
+  MutationDateFrom: '',
+  MutationDateUntil: '',
   snackbar: false,
-  pesanTransfer: ''
+  pesanMutation: '',
+  items: []
 })
 
 const myAxios = inject('myAxios')
@@ -16,23 +15,30 @@ const submit = () => {
   console.log('submit clicked', data)
 
   myAxios
-    .post('/transaction/transfer-bank', {
-      AccountID: data.AccountID,
-      BankID: data.BankID,
-      Amount: data.Amount
+    .get('/transaction/get', {
+      MutationDateFrom: data.MutationDateFrom,
+      MutationDateUntil: data.MutationDateUntil
     })
     .then(
       (res) => {
         if (res.status == 200) {
-          data.pesanTransfer = 'Transaksi Berhasil'
+          data.pesanMutation = 'Mutasi berhasil'
+          // data.MutationDateFrom = res.data.data
+          // data.MutationDateUntil = res.data.data
+          data.items = res.data.data
+          // console.log(res.data)
         }
         data.snackbar = true
       },
       (err) => {
-        data.pesanTransfer = 'Transaksi Gagal'
+        data.pesanMutation = 'Mutasi Gagal'
         data.snackbar = true
       }
     )
+
+  onMounted(() => {
+    submit()
+  })
 }
 </script>
 
@@ -40,21 +46,18 @@ const submit = () => {
   <v-card class="pa-3">
     <div class="container">
       <div>
-        <label>Account ID</label>
-        <v-text-field type="text" v-model="data.AccountID" />
+        <label>Mutation Date From</label>
+        <v-text-field type="date" v-model="data.MutationDateFrom" />
       </div>
       <div>
-        <label>Bank ID</label>
-        <v-text-field type="text" v-model="data.BankID" />
+        <label>Mutation Date Until</label>
+        <v-text-field type="date" v-model="data.MutationDateUntil" />
       </div>
-      <div>
-        <label>Amount</label>
-        <v-number-input v-model="data.Amount" />
-      </div>
-      <v-btn @click="submit"> Button </v-btn>
+      <v-btn @click="submit"> Check Mutation </v-btn>
     </div>
+    <v-data-table :items="data.items"></v-data-table>
     <v-snackbar v-model="data.snackbar">
-      {{ data.pesanTransfer }}
+      {{ data.pesanMutation }}
       <template v-slot:actions>
         <v-btn color="plum" variant="text" @click="data.snackbar = false"> Close </v-btn>
       </template>
@@ -88,8 +91,8 @@ input {
 
 button {
   padding: 10px 15px;
-  background-color: plum;
-  color: black;
+  background-color: rgb(7, 16, 144);
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;

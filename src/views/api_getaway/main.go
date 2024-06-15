@@ -60,7 +60,7 @@ func main() {
 			"data": clientResponse,
 		})
 	})
-	transactionRoute.POST("/transfer-bank", handler.NewTransaction().CreateTransaction)
+	transactionRoute.POST("/transfer-bank", handler.NewTransaction().TransferBank)
 
 	authRoute := r.Group("/auth")
 	authRoute.POST("/login", handler.NewAuthRepository().Login)
