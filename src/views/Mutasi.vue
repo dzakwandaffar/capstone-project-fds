@@ -91,7 +91,7 @@ input {
 
 button {
   padding: 10px 15px;
-  background-color: rgb(7, 16, 144);
+  background-color: rgb(225, 11, 93);
   color: white;
   border: none;
   border-radius: 4px;
@@ -99,6 +99,6 @@ button {
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #1c1ca4;
 }
 </style>

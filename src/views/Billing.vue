@@ -99,7 +99,7 @@ export default {
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn text="Close" @click="isActive.value = false"></v-btn>
+                <v-btn text="Close" @click="isActive.value = false" class="button"></v-btn>
               </v-card-actions>
             </v-card>
           </template>
@@ -114,3 +114,9 @@ export default {
     </v-container>
   </v-card>
 </template>
+
+<style>
+.button{
+  background-color: rgb(225, 11, 93);
+}
+</style>

@@ -15,7 +15,7 @@ const data = reactive({
 
 <template>
   <header>
-    <img alt="Bank logo" class="logo" src="@/assets/Bankceleng.jpeg" width="175" height="175" />
+    <img alt="Bank logo" class="logo" src="@/assets/Bankceleng.jpeg" width="155" height="200" />
 
     <div class="wrapper">
       <Header :text="'Selamat Datang di'">

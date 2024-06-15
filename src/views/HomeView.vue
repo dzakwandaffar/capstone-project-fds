@@ -69,8 +69,12 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  background-color: blue;
+  background-color: rgb(225, 11, 93);
   border-radius: 4px;
   color: white;
+}
+
+button:hover {
+  background-color: #1c1ca4;
 }
 </style>
