@@ -23,6 +23,9 @@ func main() {
 		ExposeHeaders: []string{"*"},
 	}))
 
+	authRoute := r.Group("/auth")
+	authRoute.POST("/login", handler.NewAuth().Login)
+
 	accountRoute := r.Group("/account")
 	accountRoute.GET("/get", handler.NewAccount().GetAccount)
 	accountRoute.POST("/create", handler.NewAccount().CreateAccount)
@@ -30,6 +33,7 @@ func main() {
 	accountRoute.DELETE("/delete/:id", handler.NewAccount().DeleteAccount)
 
 	transactionRoute := r.Group("/transaction")
+	transactionRoute.GET("/get", handler.NewTransaction().Get)
 	transactionRoute.GET("/biller", handler.NewTransaction().GetTransaction)
 	transactionRoute.GET("/biller/list-account", handler.NewTransaction().GetListAccount)
 	transactionRoute.GET("/biller/:billerid/:accountid", handler.NewTransaction().GetCheckBiller)

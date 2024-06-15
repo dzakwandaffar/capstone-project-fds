@@ -15,6 +15,7 @@ type TransactionInterface interface {
 	GetTransaction(*gin.Context)
 	GetListAccount(*gin.Context)
 	GetCheckBiller(*gin.Context)
+	Get(*gin.Context)
 }
 
 type transactionImplement struct{}
@@ -51,6 +52,30 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 		"data":    bodyPayloadTxn,
 	})
 
+}
+
+func (a *transactionImplement) Get(g *gin.Context) {
+
+	transactions := []model.Transaction{}
+
+	orm := utils.NewDatabase().Orm
+	db, _ := orm.DB()
+
+	defer db.Close()
+
+	result := orm.Find(&transactions)
+
+	if result.Error != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": result.Error,
+		})
+		return
+	}
+
+	g.JSON(http.StatusOK, gin.H{
+		"message": "Get transaction successfully",
+		"data":    transactions,
+	})
 }
 
 type Biller struct {
@@ -103,7 +128,6 @@ type BillerListAccount struct {
 		Amount    float64 `json:"Amount"`
 		Name      string  `json:"Name"`
 		AccountID string  `json:"AccountID"`
-		Paid      bool
 	} `json:"ListAccount"`
 }
 
