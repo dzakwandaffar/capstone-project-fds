@@ -1,3 +1,4 @@
+import 'package:bank_celengan/home/screen_detail/biller_screen_detail.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenDetail extends StatelessWidget {
@@ -136,15 +137,20 @@ class HomeScreenDetail extends StatelessWidget {
                             ),
                             child: IconButton(
                               color: Colors.black,
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return BillerScreenDetail();
+                                }));
+                              },
                               icon: const Icon(
-                                Icons.wallet,
+                                Icons.attach_money,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                           const Text(
-                            "E-Wallet",
+                            "Biller",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -165,13 +171,13 @@ class HomeScreenDetail extends StatelessWidget {
                               color: Colors.black,
                               onPressed: () {},
                               icon: const Icon(
-                                Icons.smartphone,
+                                Icons.wallet,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                           const Text(
-                            "Pulsa/Data",
+                            "E-Wallet",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
