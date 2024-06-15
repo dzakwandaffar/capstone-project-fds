@@ -55,6 +55,11 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 }
 
 func (a *transactionImplement) Get(g *gin.Context) {
+	queryParam := g.Request.URL.Query()
+
+	start_date := queryParam.Get("start_date")
+
+	end_date := queryParam.Get("end_date")
 
 	transactions := []model.Transaction{}
 
@@ -63,7 +68,12 @@ func (a *transactionImplement) Get(g *gin.Context) {
 
 	defer db.Close()
 
-	result := orm.Find(&transactions)
+	conds := ""
+	if start_date != "" && end_date != "" {
+		conds = "transaction_date BETWEEN '" + start_date + "' AND '" + end_date
+	}
+
+	result := orm.Find(&transactions, conds)
 
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -215,6 +225,7 @@ func (b *transactionImplement) GetCheckBiller(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, data)
+
 }
 
 //================ blm selesai mutasi
