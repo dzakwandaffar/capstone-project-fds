@@ -140,14 +140,14 @@ func (a *accountImplement) DeleteAccount(g *gin.Context) {
 	})
 }
 
-type BodyPayloadBalance struct{
+type BodyPayloadBalance struct {
 	Account_ID string
-	Month string
+	Month      string
 }
 
 func (a *accountImplement) BalanceAccount(g *gin.Context) {
 	bodyPayloadBal := BodyPayloadBalance{}
-	
+
 	err := g.BindJSON(&bodyPayloadBal)
 	if err != nil {
 		g.AbortWithError(http.StatusBadRequest, err)

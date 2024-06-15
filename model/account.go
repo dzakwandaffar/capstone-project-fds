@@ -5,6 +5,7 @@ type Account struct {
 	Name      string
 	Username  string `gorm:"column-username"`
 	Password  string
+	Address   string
 }
 
 func (a *Account) TableName() string {

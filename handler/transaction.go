@@ -57,7 +57,7 @@ type Biller struct {
 	Data []struct {
 		BillerID string `json:"BillerID"`
 		Name     string `json:"Name"`
-	} `json:"data"`
+	} `json:"Data"`
 }
 
 func (b *transactionImplement) GetTransaction(g *gin.Context) {
@@ -98,12 +98,13 @@ func (b *transactionImplement) GetTransaction(g *gin.Context) {
 }
 
 type BillerListAccount struct {
-	Data []struct {
-		BillerID  string `json:"BillerID"`
-		Amount    string `json: Amount`
-		Name      string `json:"Name"`
-		AccountID string `json: "AccountID"`
-	} `json:"data"`
+	ListAccount []struct {
+		BillerID  string  `json:"BillerID"`
+		Amount    float64 `json:"Amount"`
+		Name      string  `json:"Name"`
+		AccountID string  `json:"AccountID"`
+		Paid      bool
+	} `json:"ListAccount"`
 }
 
 func (b *transactionImplement) GetListAccount(g *gin.Context) {
@@ -150,7 +151,7 @@ type CheckBiller struct {
 		Name      string  `json:"Name"`
 		AccountID string  `json:"AccountID"`
 		Paid      bool
-	} `json:"biller"`
+	} `json:"Biller"`
 }
 
 func (b *transactionImplement) GetCheckBiller(g *gin.Context) {
@@ -192,40 +193,44 @@ func (b *transactionImplement) GetCheckBiller(g *gin.Context) {
 	g.JSON(http.StatusOK, data)
 }
 
-type CheckMutasi struct {
-	Mutasi struct {
-		BillerID  string  `json:"BillerID"`
-		Amount    float64 `json:"Amount"`
-		Name      string  `json:"Name"`
-		AccountID string  `json:"AccountID"`
-		Paid      bool
-	} `json:"Mutasi"`
-}
+//================ blm selesai mutasi
 
-func (b *transactionImplement) GetCheckMutasi(g *gin.Context) {
+// type CheckMutasi struct {
+// 	Mutasi struct {
+// 		BillerID  string  `json:"BillerID"`
+// 		Amount    float64 `json:"Amount"`
+// 		Name      string  `json:"Name"`
+// 		AccountID string  `json:"AccountID"`
+// 		Paid      bool
+// 	} `json:"Mutasi"`
+// }
 
-	queryParam := g.Request.URL.Query()
+// func (b *transactionImplement) GetCheckMutasi(g *gin.Context) {
 
-	name := queryParam.Get("name")
+// 	queryParam := g.Request.URL.Query()
 
-	accounts := []model.Account{}
+// 	name := queryParam.Get("name")
 
-	orm := utils.NewDatabase().Orm
-	db, _ := orm.DB()
+// 	accounts := []model.Account{}
 
-	defer db.Close()
+// 	orm := utils.NewDatabase().Orm
+// 	db, _ := orm.DB()
 
-	result := orm.Find(&accounts, "name = ?", name)
+// 	defer db.Close()
 
-	if result.Error != nil {
-		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": result.Error,
-		})
-		return
-	}
+// 	result := orm.Find(&accounts, "name = ?", name)
 
-	g.JSON(http.StatusOK, gin.H{
-		"message": "Get account successfully",
-		"data":    accounts,
-	})
-}
+// 	if result.Error != nil {
+// 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+// 			"error": result.Error,
+// 		})
+// 		return
+// 	}
+
+// 	g.JSON(http.StatusOK, gin.H{
+// 		"message": "Get account successfully",
+// 		"data":    accounts,
+// 	})
+// }
+
+//================ blm selesai mutasi
